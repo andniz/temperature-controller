@@ -1,8 +1,11 @@
 import os
 import re
 
+from dotenv import load_dotenv
+
 from constants import ActionTypes
 from exceptions import FermentationConfigError
+from utils import FermentationConfigParser
 
 
 class FermentationTemperatureController:
@@ -12,7 +15,7 @@ class FermentationTemperatureController:
         data_files = os.listdir('data')
         if len(data_files) > 0:
             raise FermentationConfigError('Too many config files')
-        if not re.match(self.config_filename_pattern, data_files[0])
+        if not re.match(self.config_filename_pattern, data_files[0]):
             raise FermentationConfigError('File is not properly named')
         return data_files[0]
 
@@ -41,6 +44,7 @@ class FermentationTemperatureController:
         pass
 
     def step(self):
+        load_dotenv()
         step_info, actors_state, current_temperatures = self.get_needed_data()
         action = self.determine_next_action(step_info, actors_state, current_temperatures)
         self.make_action(action)

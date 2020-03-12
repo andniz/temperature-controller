@@ -3,14 +3,10 @@ import os
 from datetime import datetime
 
 import pytz
-from dotenv import load_dotenv
 from marshmallow.exceptions import MarshmallowError
 
 from controller.utils.config_schema import ConfigSchema
 from controller.utils.exceptions import FermentationConfigParserError
-
-# TODO: move this to controller, as its the main module
-load_dotenv()
 
 
 class FermentationConfigParser:
