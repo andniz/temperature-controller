@@ -1,0 +1,24 @@
+{
+  "id": 2137,
+  "startDatetime": "2020-03-07T18:26:42.451428+01:00",
+  "hysteresis": "0.5",
+  "numberOfSteps": 4,
+  "steps": [
+    {
+      "targetTemperature": "17.0",
+      "endDatetime": "2020-03-17T18:30:00.000000+01:00"
+    },
+    {
+      "targetTemperature": "21.0",
+      "endDatetime": "2020-03-19T18:30:00.000000+01:00"
+    },
+    {
+      "targetTemperature": "24.0",
+      "endDatetime": "2020-03-24T18:30:00.000000+01:00"
+    },
+    {
+      "targetTemperature": "6.0",
+      "endDatetime": "2020-03-31T18:30:00.000000+01:00"
+    }
+  ]
+}
