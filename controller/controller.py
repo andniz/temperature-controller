@@ -4,10 +4,10 @@ from typing import Union
 
 from dotenv import load_dotenv
 
-from constants import ActionTypes
-from exceptions import FermentationConfigError
-from utils import FermentationConfigParser, get_logger
-from utils.helpers import read_temperature
+from .constants import ActionTypes
+from .exceptions import FermentationConfigError
+from .utils import FermentationConfigParser, get_logger
+from .utils.helpers import read_temperature
 
 
 logger = get_logger(__name__)
