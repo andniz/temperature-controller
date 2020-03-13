@@ -1,11 +1,16 @@
 import os
 import re
+from typing import Union
 
 from dotenv import load_dotenv
 
 from constants import ActionTypes
 from exceptions import FermentationConfigError
-from utils import FermentationConfigParser
+from utils import FermentationConfigParser, get_logger
+from utils.helpers import read_temperature
+
+
+logger = get_logger(__name__)
 
 
 class FermentationTemperatureController:
@@ -19,16 +24,20 @@ class FermentationTemperatureController:
             raise FermentationConfigError('File is not properly named')
         return data_files[0]
 
-    def get_step_info(self, config_filename):
-        pass
+    def get_step_info(self, config_filename: str) -> Union[dict, type(None)]:
+        return FermentationConfigParser.get_step_info(config_filename)
 
     def read_actors_state(self):
         # TODO: data needed to read this - from .env
         pass
 
     def read_current_temperatures(self):
-        # just like the above
-        pass
+        air_thermometer_id = os.getenv('air_thermometer_id')
+        wort_thermometer_id = os.getenv('wort_thermometer_id')
+        air_temperature = read_temperature(air_thermometer_id)
+        wort_temperature = read_temperature(wort_thermometer_id)
+        logger.info(f'Temperatures read: {air_temperature=}, {wort_temperature=}')
+        return air_temperature, wort_temperature
 
     def get_needed_data(self):
         config_filename = self.get_config_filename()
