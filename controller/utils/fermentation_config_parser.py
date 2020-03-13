@@ -3,14 +3,10 @@ import os
 from datetime import datetime
 
 import pytz
-from dotenv import load_dotenv
 from marshmallow.exceptions import MarshmallowError
 
-from controller.utils.config_schema import ConfigSchema
-from controller.utils.exceptions import FermentationConfigParserError
-
-# TODO: move this to controller, as its the main module
-load_dotenv()
+from .config_schema import ConfigSchema
+from .exceptions import FermentationConfigParserError
 
 
 class FermentationConfigParser:
@@ -51,3 +47,8 @@ class FermentationConfigParser:
         except MarshmallowError:
             raise FermentationConfigParserError('Config file is improperly constructed')
         return cls.parse_step_info(config)
+
+# 28-0315937bbdff - z dłuższym kablem
+
+# jak podłączyć? komenda pinout -> czerwony na 5V, szary na GMD, niebieski na GPIO4
+# https://tutorials-raspberrypi.com/raspberry-pi-temperature-sensor-1wire-ds18b20/
