@@ -7,11 +7,16 @@ from marshmallow.exceptions import MarshmallowError
 
 from .config_schema import ConfigSchema
 from .exceptions import FermentationConfigParserError
+from .logger import get_logger
+
+
+logger = get_logger(__name__)
 
 
 class FermentationConfigParser:
     @classmethod
     def get_file_content(cls, filename):
+        logger.debug(f'')
         try:
             with open(filename, 'r') as f:
                 content = json.load(f)
@@ -31,22 +36,28 @@ class FermentationConfigParser:
         timezone_name = os.getenv('timezone', 'Europe/Warsaw')
         now = datetime.now(tz=pytz.timezone(timezone_name))
         if now < config['start_datetime']:
+            logger.info("Scheduled fermentation hasn't begun")
             return None
         steps = config['steps']
         for step in steps:
             step_end = step['end_datetime']
             if now <= step_end:
                 return step
+        logger.info('Scheduled fermentation has finished')
         return None
 
     @classmethod
     def get_step_info(cls, filename):
+        logger.info(f'Parser received a request to parse file {filename}')
         content = cls.get_file_content(filename)
         try:
             config = cls.load_with_schema(content)
         except MarshmallowError:
+            logger.critical('Improperly constructed config file')
             raise FermentationConfigParserError('Config file is improperly constructed')
-        return cls.parse_step_info(config)
+        step = cls.parse_step_info(config)
+        logger.info(f'Parsed information: {step}')
+        return step
 
 # 28-0315937bbdff - z dłuższym kablem
 
