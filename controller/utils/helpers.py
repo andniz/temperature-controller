@@ -7,9 +7,9 @@ THERMOMETER_PATH = '/sys/bus/w1/devices/{}/w1_slave'
 DEV_THERMOMETER_PATH = 'tests/assets/thermometer_file.txt'
 
 
-def read_temperature(thermometer_id: str) -> Decimal:
+def read_temperature(thermometer_id: str = None) -> Decimal:
     environment = os.getenv('environment', 'development')
-    if environment == 'production':
+    if environment == 'production' and thermometer_id:
         filepath = THERMOMETER_PATH.format(thermometer_id)
     else:
         filepath = DEV_THERMOMETER_PATH

@@ -59,4 +59,3 @@ class FermentationTemperatureController:
         self.make_action(action)
 
 # TODO: wrap in try/excepts
-# TODO: add logging

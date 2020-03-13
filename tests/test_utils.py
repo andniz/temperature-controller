@@ -5,6 +5,7 @@ import pytest
 from freezegun import freeze_time
 
 from controller import FermentationConfigParser, FermentationConfigParserError
+from controller.utils import read_temperature
 
 
 class TestParserGetFileContent:
@@ -66,3 +67,8 @@ class TestParserE2E:
     def test_end_to_end(self):
         step = FermentationConfigParser.get_step_info('tests/assets/dummy_config.json')
         assert step['target_temperature'] == Decimal('24.0')
+
+
+class TestReadTemperature:
+    temperature = read_temperature()
+    assert temperature == Decimal('20.375')

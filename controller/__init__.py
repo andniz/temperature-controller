@@ -1,1 +1,2 @@
 from .utils import FermentationConfigParser, FermentationConfigParserError
+from .controller import FermentationTemperatureController
