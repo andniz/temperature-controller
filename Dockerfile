@@ -6,4 +6,4 @@ COPY . .
 
 RUN pip install -r requirements.txt
 
-CMD ["python", "./controller/dummy_main.py"]
+CMD ["python", "./dummy_main.py"]

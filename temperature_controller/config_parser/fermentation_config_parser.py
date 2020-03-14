@@ -1,21 +1,25 @@
 import json
 import os
 from datetime import datetime
+from typing import Union
 
 import pytz
 from marshmallow.exceptions import MarshmallowError
 
+from ..utils import get_logger
 from .config_schema import ConfigSchema
-from .exceptions import FermentationConfigParserError
-from .logger import get_logger
 
 
 logger = get_logger(__name__)
 
 
+class FermentationConfigParserError(Exception):
+    pass
+
+
 class FermentationConfigParser:
     @classmethod
-    def get_file_content(cls, filename):
+    def get_file_content(cls, filename: str) -> dict:
         logger.debug(f'')
         try:
             with open(filename, 'r') as f:
@@ -27,12 +31,12 @@ class FermentationConfigParser:
         return content
 
     @classmethod
-    def load_with_schema(cls, json_content):
+    def load_with_schema(cls, json_content: dict) -> dict:
         schema = ConfigSchema()
         return schema.load(json_content)
 
     @classmethod
-    def parse_step_info(cls, config):
+    def parse_step_info(cls, config: dict) -> Union[dict, type(None)]:
         timezone_name = os.getenv('timezone', 'Europe/Warsaw')
         now = datetime.now(tz=pytz.timezone(timezone_name))
         if now < config['start_datetime']:
@@ -47,7 +51,7 @@ class FermentationConfigParser:
         return None
 
     @classmethod
-    def get_step_info(cls, filename):
+    def get_step_info(cls, filename: str) -> Union[dict, type(None)]:
         logger.info(f'Parser received a request to parse file {filename}')
         content = cls.get_file_content(filename)
         try:
@@ -59,7 +63,6 @@ class FermentationConfigParser:
         logger.info(f'Parsed information: {step}')
         return step
 
-# 28-0315937bbdff - z dłuższym kablem
 
 # jak podłączyć? komenda pinout -> czerwony na 5V, szary na GMD, niebieski na GPIO4
 # https://tutorials-raspberrypi.com/raspberry-pi-temperature-sensor-1wire-ds18b20/
