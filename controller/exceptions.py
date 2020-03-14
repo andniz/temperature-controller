@@ -1,2 +1,0 @@
-class FermentationConfigError(Exception):
-    pass

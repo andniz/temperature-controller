@@ -6,12 +6,15 @@ from typing import Union
 import pytz
 from marshmallow.exceptions import MarshmallowError
 
+from utils import get_logger
 from .config_schema import ConfigSchema
-from .exceptions import FermentationConfigParserError
-from .logger import get_logger
 
 
 logger = get_logger(__name__)
+
+
+class FermentationConfigParserError(Exception):
+    pass
 
 
 class FermentationConfigParser:

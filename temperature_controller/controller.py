@@ -4,13 +4,17 @@ from typing import Union
 
 from dotenv import load_dotenv
 
-from .constants import ActionTypes
-from .exceptions import FermentationConfigError
-from .utils import FermentationConfigParser, get_logger
-from .utils.helpers import read_temperature
+from constants import ActionTypes
+
+from utils import get_logger, read_temperature
+from parser import FermentationConfigParser
 
 
 logger = get_logger(__name__)
+
+
+class FermentationConfigError(Exception):
+    pass
 
 
 class FermentationTemperatureController:

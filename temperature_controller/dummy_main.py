@@ -1,14 +1,13 @@
 from dotenv import load_dotenv
 
 from controller import FermentationTemperatureController
-from utils import FermentationConfigParser, get_logger
-
-
-logger = get_logger(__name__)
+from parser.fermentation_config_parser import FermentationConfigParser
+from utils.logger import get_logger
 
 
 if __name__ == '__main__':
     load_dotenv()
+    logger = get_logger(__name__)
     logger.info('Started main')
     controller = FermentationTemperatureController()
     air, wort = controller.read_current_temperatures()
