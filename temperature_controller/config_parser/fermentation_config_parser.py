@@ -45,6 +45,7 @@ class FermentationConfigParser:
         for step in steps:
             step_end = step['end_datetime']
             if now <= step_end:
+                step['hysteresis'] = config['hysteresis']
                 return step
         logger.info('Scheduled fermentation has finished')
         return None

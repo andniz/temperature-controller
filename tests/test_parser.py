@@ -37,16 +37,19 @@ class TestParserParseStep:
     def test_first_step(self, config):
         step = FermentationConfigParser.parse_step_info(config)
         assert step['target_temperature'] == Decimal('17.0')
+        assert step['hysteresis'] == Decimal('0.5')
 
     @freeze_time('2020-03-21')
     def test_step_in_the_middle(self, config):
         step = FermentationConfigParser.parse_step_info(config)
         assert step['target_temperature'] == Decimal('24.0')
+        assert step['hysteresis'] == Decimal('0.5')
 
     @freeze_time('2020-05-20')
     def test_step_without_end_date(self, config):
         step = FermentationConfigParser.parse_step_info(config)
         assert step['target_temperature'] == Decimal('6.0')
+        assert step['hysteresis'] == Decimal('0.5')
 
     @freeze_time('2020-02-12')
     def test_too_early(self, config):
@@ -66,3 +69,4 @@ class TestParserE2E:
     def test_end_to_end(self):
         step = FermentationConfigParser.get_step_info('tests/assets/dummy_config.json')
         assert step['target_temperature'] == Decimal('24.0')
+        assert step['hysteresis'] == Decimal('0.5')

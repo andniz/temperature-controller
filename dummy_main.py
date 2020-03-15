@@ -1,5 +1,5 @@
-from temperature_controller import FermentationTemperatureController
 from temperature_controller.config_parser import FermentationConfigParser
+from temperature_controller.controller import FermentationTemperatureController
 from temperature_controller.utils import get_logger
 
 
@@ -11,7 +11,6 @@ if __name__ == '__main__':
     logger.info(f'Temps: {air=}, {wort=}')
     step = FermentationConfigParser.get_step_info('tests/assets/dummy_config.json')
     logger.info(f'{step=}')
-
 
 
 # jak podłączyć? komenda pinout -> czerwony na 5V, szary na GMD, niebieski na GPIO4
