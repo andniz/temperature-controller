@@ -1,8 +1,11 @@
 import logging
 import os
 
+from dotenv import load_dotenv
+
 
 def get_logger(name):
+    load_dotenv()
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
