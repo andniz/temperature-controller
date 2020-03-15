@@ -4,17 +4,15 @@ from typing import Union
 
 from dotenv import load_dotenv
 
-from temperature_controller.constants import ActionTypes
-
-from temperature_controller.utils import get_logger, read_temperature
 from temperature_controller.config_parser import FermentationConfigParser
+from temperature_controller.constants import (
+    ActionTypes, TOO_MANY_CONFIGS_MESSAGE, NO_CONFIG_FILE_MESSAGE
+)
+from temperature_controller.exceptions import FermentationConfigError
+from temperature_controller.utils import get_logger, read_temperature
 
 
 logger = get_logger(__name__)
-
-
-class FermentationConfigError(Exception):
-    pass
 
 
 class FermentationTemperatureController:
@@ -23,9 +21,11 @@ class FermentationTemperatureController:
     def get_config_filename(self):
         data_files = os.listdir('data')
         if len(data_files) > 0:
-            raise FermentationConfigError('Too many config files')
+            logger.error(TOO_MANY_CONFIGS_MESSAGE)
+            raise FermentationConfigError(TOO_MANY_CONFIGS_MESSAGE)
         if not re.match(self.config_filename_pattern, data_files[0]):
-            raise FermentationConfigError('File is not properly named')
+            logger.error(NO_CONFIG_FILE_MESSAGE)
+            raise FermentationConfigError(NO_CONFIG_FILE_MESSAGE)
         return data_files[0]
 
     def get_step_info(self, config_filename: str) -> Union[dict, type(None)]:

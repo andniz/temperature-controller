@@ -14,3 +14,8 @@ if __name__ == '__main__':
     logger.info(f'Temps: {air=}, {wort=}')
     step = FermentationConfigParser.get_step_info('tests/assets/dummy_config.json')
     print(step)
+
+
+
+# jak podłączyć? komenda pinout -> czerwony na 5V, szary na GMD, niebieski na GPIO4
+# https://tutorials-raspberrypi.com/raspberry-pi-temperature-sensor-1wire-ds18b20/

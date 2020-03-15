@@ -6,28 +6,27 @@ from typing import Union
 import pytz
 from marshmallow.exceptions import MarshmallowError
 
-from ..utils import get_logger
-from .config_schema import ConfigSchema
+from temperature_controller.config_parser.config_schema import ConfigSchema
+from temperature_controller.constants import CONFIG_NOT_JSON_MESSAGE, NO_CONFIG_MESSAGE
+from temperature_controller.exceptions import FermentationConfigParserError
+from temperature_controller.utils import get_logger
 
 
 logger = get_logger(__name__)
 
 
-class FermentationConfigParserError(Exception):
-    pass
-
-
 class FermentationConfigParser:
     @classmethod
     def get_file_content(cls, filename: str) -> dict:
-        logger.debug(f'')
         try:
             with open(filename, 'r') as f:
                 content = json.load(f)
         except FileNotFoundError:
-            raise FermentationConfigParserError('Config file not found at given location')
+            logger.error(NO_CONFIG_MESSAGE)
+            raise FermentationConfigParserError(NO_CONFIG_MESSAGE)
         except json.decoder.JSONDecodeError:
-            raise FermentationConfigParserError('Config file is not valid JSON')
+            logger.error(CONFIG_NOT_JSON_MESSAGE)
+            raise FermentationConfigParserError(CONFIG_NOT_JSON_MESSAGE)
         return content
 
     @classmethod
@@ -62,7 +61,3 @@ class FermentationConfigParser:
         step = cls.parse_step_info(config)
         logger.info(f'Parsed information: {step}')
         return step
-
-
-# jak podłączyć? komenda pinout -> czerwony na 5V, szary na GMD, niebieski na GPIO4
-# https://tutorials-raspberrypi.com/raspberry-pi-temperature-sensor-1wire-ds18b20/
