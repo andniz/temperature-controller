@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime
+from pathlib import Path
 from typing import Union
 
 import pytz
@@ -17,8 +18,9 @@ logger = get_logger(__name__)
 
 class FermentationConfigParser:
     @classmethod
-    def get_file_content(cls, filename: str) -> dict:
+    def get_file_content(cls, filename: Path) -> dict:
         try:
+            # noinspection PyTypeChecker
             with open(filename, 'r') as f:
                 content = json.load(f)
         except FileNotFoundError:
@@ -51,9 +53,9 @@ class FermentationConfigParser:
         return None
 
     @classmethod
-    def get_step_info(cls, filename: str) -> Union[dict, type(None)]:
-        logger.info(f'Parser received a request to parse file {filename}')
-        content = cls.get_file_content(filename)
+    def get_step_info(cls, filepath: Path) -> Union[dict, type(None)]:
+        logger.info(f'Parser received a request to parse file {filepath}')
+        content = cls.get_file_content(filepath)
         try:
             config = cls.load_with_schema(content)
         except MarshmallowError:
