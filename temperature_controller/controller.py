@@ -1,7 +1,6 @@
 import os
-import re
 from decimal import Decimal
-from typing import Dict, Tuple, Union
+from typing import Tuple
 
 from dotenv import load_dotenv
 
@@ -28,9 +27,6 @@ class FermentationTemperatureController:
             raise FermentationConfigError(CONFIG_FILE_ERROR_MESSAGE)
         return data_files[0]
 
-    def get_step_info(self, config_filename: Path) -> Union[Dict, None]:
-        return FermentationConfigParser.get_step_info(config_filename)
-
     def read_current_action(self) -> str:
         # TODO: data needed to read this - from .env
         return Actions.NO_ACTION
@@ -45,7 +41,7 @@ class FermentationTemperatureController:
 
     def get_needed_data(self):
         config_filename = self.get_config_filename()
-        step_info = self.get_step_info(config_filename)
+        step_info = FermentationConfigParser.get_step_info(config_filename)
         current_action = self.read_current_action()
         current_temperatures = self.read_current_temperatures()
         return step_info, current_action, current_temperatures
@@ -90,7 +86,8 @@ class FermentationTemperatureController:
     def step(self):
         load_dotenv()
         step_info, current_action, current_temperatures = self.get_needed_data()
-        action = self.determine_next_action(step_info, current_action, current_temperatures)
-        self.make_action(action)
+        if step_info is not None:
+            action = self.determine_next_action(step_info, current_action, current_temperatures)
+            self.make_action(action)
 
 # TODO: wrap in try/excepts

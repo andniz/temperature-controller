@@ -1,5 +1,6 @@
 import json
 from decimal import Decimal
+from pathlib import Path
 
 import pytest
 from freezegun import freeze_time
@@ -30,7 +31,7 @@ class TestParserGetFileContent:
 class TestParserParseStep:
     @pytest.fixture
     def config(self):
-        with open('tests/assets/dummy_config.json', 'r') as f:
+        with open(Path('tests/assets/dummy_config.json'), 'r') as f:
             return FermentationConfigParser.load_with_schema(json.load(f))
 
     @freeze_time('2020-03-12')
@@ -58,7 +59,7 @@ class TestParserParseStep:
 
     @freeze_time('2020-04-20')
     def test_all_steps_finished(self):
-        with open('tests/assets/dummy_config_with_end_datetime.json', 'r') as f:
+        with open(Path('tests/assets/dummy_config_with_end_datetime.json'), 'r') as f:
             config = FermentationConfigParser.load_with_schema(json.load(f))
         step = FermentationConfigParser.parse_step_info(config)
         assert step is None
