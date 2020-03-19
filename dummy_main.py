@@ -1,9 +1,8 @@
+from pathlib import Path
+
 from temperature_controller.config_parser import FermentationConfigParser
 from temperature_controller.controller import FermentationTemperatureController
 from temperature_controller.utils import get_logger
-
-from pathlib import Path
-
 
 if __name__ == '__main__':
     logger = get_logger(__name__)

@@ -1,23 +1,33 @@
 import os
+import sys
 from decimal import Decimal
+from pathlib import Path
 from typing import Tuple
+from unittest.mock import Mock
 
 from dotenv import load_dotenv
 
 from temperature_controller.config_parser import FermentationConfigParser
 from temperature_controller.constants import (
-    Actions, CONFIG_FILE_ERROR_MESSAGE,
-    CurrentTempStatus, HysteresisStatus, CONDITIONS_TO_ACTION, MIN_FRIDGE_TEMPERATURE
+    CONDITIONS_TO_ACTION, CONFIG_FILE_ERROR_MESSAGE, MIN_FRIDGE_TEMPERATURE, Actions,
+    CurrentTempStatus, HysteresisStatus
 )
 from temperature_controller.exceptions import FermentationConfigError
 from temperature_controller.utils import get_logger, read_temperature
-from pathlib import Path
+
+try:
+    from temperature_controller.output import OutputController
+except RuntimeError:
+    sys.modules['RPi.GPIO'] = Mock()
+    from temperature_controller.output import OutputController
 
 
 logger = get_logger(__name__)
 
 
 class FermentationTemperatureController:
+    def __init__(self):
+        self.output_controller = OutputController()
 
     def get_config_filename(self) -> Path:
         data_path = Path('data')
@@ -26,10 +36,6 @@ class FermentationTemperatureController:
             logger.error(CONFIG_FILE_ERROR_MESSAGE)
             raise FermentationConfigError(CONFIG_FILE_ERROR_MESSAGE)
         return data_files[0]
-
-    def read_current_action(self) -> str:
-        # TODO: data needed to read this - from .env
-        return Actions.NO_ACTION
 
     def read_current_temperatures(self) -> Tuple[Decimal, Decimal]:
         air_thermometer_id = os.getenv('air_thermometer_id')
@@ -42,7 +48,7 @@ class FermentationTemperatureController:
     def get_needed_data(self):
         config_filename = self.get_config_filename()
         step_info = FermentationConfigParser.get_step_info(config_filename)
-        current_action = self.read_current_action()
+        current_action = self.output_controller.read_output()
         current_temperatures = self.read_current_temperatures()
         return step_info, current_action, current_temperatures
 
@@ -80,8 +86,8 @@ class FermentationTemperatureController:
 
         return next_action
 
-    def make_action(self, action):
-        pass
+    def make_action(self, action: str):
+        self.output_controller.set_output(action)
 
     def step(self):
         load_dotenv()

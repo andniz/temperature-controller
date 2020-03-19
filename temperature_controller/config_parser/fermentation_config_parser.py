@@ -8,10 +8,11 @@ import pytz
 from marshmallow.exceptions import MarshmallowError
 
 from temperature_controller.config_parser.config_schema import ConfigSchema
-from temperature_controller.constants import CONFIG_NOT_JSON_MESSAGE, NO_CONFIG_MESSAGE
+from temperature_controller.constants import (
+    CONFIG_NOT_JSON_MESSAGE, NO_CONFIG_MESSAGE
+)
 from temperature_controller.exceptions import FermentationConfigParserError
 from temperature_controller.utils import get_logger
-
 
 logger = get_logger(__name__)
 

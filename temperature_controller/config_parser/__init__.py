@@ -1,1 +1,2 @@
-from .fermentation_config_parser import FermentationConfigParser, FermentationConfigParserError
+from .fermentation_config_parser import (FermentationConfigParser,
+                                         FermentationConfigParserError)

@@ -5,7 +5,8 @@ from pathlib import Path
 import pytest
 from freezegun import freeze_time
 
-from temperature_controller.config_parser import FermentationConfigParserError, FermentationConfigParser
+from temperature_controller.config_parser import (
+    FermentationConfigParser, FermentationConfigParserError)
 
 
 class TestParserGetFileContent:
